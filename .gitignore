@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+bin/hello.exe
+pkg
+src/.idea
+src/github.com
+src/gopkg.in
