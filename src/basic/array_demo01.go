@@ -35,9 +35,11 @@ func main() {
 
 	num1 = 200
 	fmt.Println(num1)
+	fmt.Printf("%p\n", &num1)
 
 	//step1:创建数组
 	var arr1 [4]int
+	fmt.Printf("%p\n", &arr1)
 	//step2: 数组的访问
 	arr1[0] = 1
 	arr1[1] = 2
