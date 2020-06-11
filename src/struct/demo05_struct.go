@@ -20,7 +20,7 @@ func main() {
 					field
 				}
 				type D struct {
-					c C //集合关系
+					c C //聚合关系
 				}
 	*/
 
