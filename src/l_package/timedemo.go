@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -80,4 +81,33 @@ func main() {
 
 	timeStamp2 := t1.Unix()
 	fmt.Println(timeStamp2)
+
+	timeStamp3 := t4.UnixNano()
+	fmt.Println(timeStamp3) //3600000000000
+
+	timeStamp4 := t1.UnixNano()
+	fmt.Println(timeStamp4)
+
+	//6.时间间隔
+	t5 := t1.Add(time.Minute)
+	fmt.Println(t1)
+	fmt.Println(t5)
+	fmt.Println(t1.Add(24 * time.Hour))
+
+	t6 := t1.AddDate(1, 0, 0)
+	fmt.Println(t6)
+
+	d1 := t5.Sub(t1)
+	fmt.Println(d1)
+
+	//7.睡眠
+	time.Sleep(3 * time.Second) //让当前的程序进入睡眠状态
+	fmt.Println("main...over...")
+
+	//睡眠[1-10]的随机秒数
+	rand.Seed(time.Now().UnixNano())
+	randNum := rand.Intn(10) + 1 //int
+	fmt.Println(randNum)
+	time.Sleep(time.Duration(randNum) * time.Second)
+	fmt.Println("睡醒了。。。")
 }
