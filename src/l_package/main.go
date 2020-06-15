@@ -1,6 +1,9 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"l_package/pk1"
 	"l_package/utils"
 )
@@ -54,8 +57,16 @@ func main() {
 					执行顺序：C--->B--->A--->main
 		5.存在依赖关系的包之间，不能循环导入
 		6.一个包可以被其他多个包import，但只能被初始化一次
+		7._操作，其实是引入该包，而不直接使用包里面的函数，仅仅是调用了该包里的init()
 	*/
 
 	utils.Count()
 	pk1.MyTest1()
+
+	db, err := sql.Open("mysql", "root:1892@tcp(127.0.0.1:3306)/my1802?charset=utf8")
+	if err != nil {
+		fmt.Println("错误信息：", err)
+		return
+	}
+	fmt.Println("链接成功", db)
 }
