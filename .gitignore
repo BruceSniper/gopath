@@ -6,3 +6,5 @@ src/.idea
 src/github.com
 src/gopkg.in
 /bin/
+/src/go.opentelemetry.io/
+/src/google.golang.org/
