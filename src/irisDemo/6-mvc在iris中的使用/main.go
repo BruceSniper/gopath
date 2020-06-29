@@ -74,7 +74,6 @@ func (uc *UserController) BeforeActivation(a mvc.BeforeActivation) {
 }
 
 func (uc *UserController) UserInfo() mvc.Result {
-	//todo
 	iris.New().Logger().Info(" user info query ")
 	return mvc.Response{}
 }
