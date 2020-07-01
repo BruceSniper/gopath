@@ -1,0 +1,6 @@
+{
+  "app_name": "QianFengCmsProject",
+  "port": "8000",
+  "static_path": "./static",
+  "mode": "dev"
+}
