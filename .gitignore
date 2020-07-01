@@ -4,4 +4,3 @@ bin/hello.exe
 pkg
 src/.idea
 /bin/
-/src/go.opentelemetry.io/
