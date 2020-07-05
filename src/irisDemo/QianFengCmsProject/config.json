@@ -2,5 +2,20 @@
   "app_name": "QianFengCmsProject",
   "port": "8000",
   "static_path": "./static",
+  "data_base": {
+    "drive": "mysql",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "user": "root",
+    "pwd": "1892",
+    "database": "testcms"
+  },
+  "redis": {
+    "net_work": "tcp",
+    "addr": "127.0.0.1",
+    "port": "6379",
+    "password": "",
+    "prefix": "qfCms_"
+  },
   "mode": "dev"
 }

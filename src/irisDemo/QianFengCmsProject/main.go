@@ -3,8 +3,12 @@ package main
 import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris/sessions"
 	"irisDemo/QianFengCmsProject/config"
+	"irisDemo/QianFengCmsProject/controller"
+	"irisDemo/QianFengCmsProject/datasource"
+	"irisDemo/QianFengCmsProject/service"
 	"time"
 )
 
@@ -23,7 +27,7 @@ func main() {
 	//路由设置
 	mvcHandle(app)
 
-	config := config.IniConfig()
+	config := config.InitConfig()
 	addr := ":" + config.Port
 	app.Run(
 		iris.Addr(addr), //在端口8000进行监听
@@ -86,6 +90,43 @@ func mvcHandle(app *iris.Application) {
 		Expires: 24 * time.Hour,
 	})
 
-	//todo
-	//engine := datasource.NewMysqlEngine()
+	//获取redis实例
+	redis := datasource.NewRedis()
+	//设置session的同步位置为redis
+	sessManager.UseDatabase(redis)
+
+	//实例化mysql数据库引擎
+	engine := datasource.NewMysqlEngine()
+
+	//管理员模块功能
+	adminService := service.NewAdminService(engine)
+
+	//返回路由组
+	admin := mvc.New(app.Party("/admin"))
+	admin.Register(
+		adminService,
+		sessManager.Start,
+		)
+	//路由组的处理器
+	admin.Handle(new(controller.AdminController))
+
+	//用户功能模块
+	//userService := service.NewUserService(engine)
+	//
+	//user := mvc.New(app.Party("/v1/users"))
+	//user.Register(
+	//	userService,
+	//	sessManager.Start,
+	//)
+	//user.Handle(new(controller.UserController))
+
+	//统计功能模块
+	statisService := service.NewStatisService(engine)
+	statis := mvc.New(app.Party("/statis/{model}/{date}/"))
+	statis.Register(
+		statisService,
+		sessManager.Start,
+	)
+	statis.Handle(new(controller.StatisController))
+
 }
