@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"imooc-product/common"
 	"imooc-product/datamodels"
+	"strconv"
 )
 
 //第一步，先开发接口
@@ -62,4 +63,62 @@ func (p *ProductManager) Insert(product *datamodels.Product) (productId int64, e
 		return
 	}
 	return result.LastInsertId()
+}
+
+//商品的删除
+func (p *ProductManager) Delete(productID int64) bool {
+	//1.判断连接是否存在
+	if err := p.Conn(); err != nil {
+		return false
+	}
+	sql := "delete from product where ID=?"
+	stmt, err := p.mysqlConn.Prepare(sql)
+	if err == nil {
+		return false
+	}
+	_, err = stmt.Exec(productID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+//商品的更新
+func (p *ProductManager) Update(product *datamodels.Product) error {
+	//1.判断连接是否存在
+	if err := p.Conn(); err != nil {
+		return false
+	}
+
+	sql := "Update product set productName=?,prouctNum=?,productImage=?,productUrl=? where ID=" + strconv.FormatInt(product.ID, 10)
+
+	stmt, err := p.mysqlConn.Prepare(sql)
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec(product.ProductName, product.ProductNum, product.ProductImage, product.ProductUrl)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels.Product, err error) {
+	//1.判断连接是否存在
+	if err = p.Conn(); err != nil {
+		return &datamodels.Product{}, err
+	}
+
+	sql := "Select * from " + p.table + " where ID=" + strconv.FormatInt(productID, 10)
+	row, errRow := p.mysqlConn.Query(sql)
+	if errRow != nil {
+		return &datamodels.Product{}, errRow
+	}
+	result := common.GetResultRow(row)
+	if len(result) == 0 {
+		return &datamodels.Product{}, nil
+	}
+	common.DataToStructByTagSql(result, productResult)
+	return
 }
