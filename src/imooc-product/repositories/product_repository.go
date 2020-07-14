@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"errors"
 	"imooc-product/common"
 	"imooc-product/datamodels"
 	"strconv"
@@ -87,7 +88,7 @@ func (p *ProductManager) Delete(productID int64) bool {
 func (p *ProductManager) Update(product *datamodels.Product) error {
 	//1.判断连接是否存在
 	if err := p.Conn(); err != nil {
-		return false
+		return errors.New("连接失败")
 	}
 
 	sql := "Update product set productName=?,prouctNum=?,productImage=?,productUrl=? where ID=" + strconv.FormatInt(product.ID, 10)
