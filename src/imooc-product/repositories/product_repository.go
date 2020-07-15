@@ -105,6 +105,7 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	return nil
 }
 
+//根据商品ID查询商品
 func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels.Product, err error) {
 	//1.判断连接是否存在
 	if err = p.Conn(); err != nil {
@@ -113,6 +114,7 @@ func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels
 
 	sql := "Select * from " + p.table + " where ID=" + strconv.FormatInt(productID, 10)
 	row, errRow := p.mysqlConn.Query(sql)
+	defer row.Close()
 	if errRow != nil {
 		return &datamodels.Product{}, errRow
 	}
@@ -121,5 +123,31 @@ func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels
 		return &datamodels.Product{}, nil
 	}
 	common.DataToStructByTagSql(result, productResult)
+	return
+}
+
+//获取所有商品
+func (p *ProductManager) SelectAll() (productArray []*datamodels.Product, errorProduct error) {
+	//1.判断连接是否存在
+	if err := p.Conn(); err != nil {
+		return nil, err
+	}
+
+	sql := "Select * from " + p.table
+	rows, err := p.mysqlConn.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	result := common.GetResultRows(rows)
+	if len(result) == 0 {
+		return nil, nil
+	}
+
+	for _, v := range result {
+		product := &datamodels.Product{}
+		common.DataToStructByTagSql(v, product)
+		productArray = append(productArray, product)
+	}
 	return
 }
