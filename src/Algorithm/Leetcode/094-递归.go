@@ -15,14 +15,10 @@ type TreeNode struct {
 }
 
 func inorderTraversal(root *TreeNode) []int {
-	return inorderRecursive(root)
-}
-
-func inorderRecursive(root *TreeNode) []int {
 	if root == nil {
 		return []int{}
 	}
-	r := append(inorderRecursive(root.Left), root.Val)
-	r = append(r, inorderRecursive(root.Right)...) //...代表右子树元素被打散一个个append到根节点后面
+	r := append(inorderTraversal(root.Left), root.Val)
+	r = append(r, inorderTraversal(root.Right)...) //...代表右子树元素被打散一个个append到根节点后面
 	return r
 }
